@@ -1022,7 +1022,7 @@ document.addEventListener('DOMContentLoaded', function() {
             serviceCard.style.animationDelay = `${index * 0.1}s`;
             
             serviceCard.innerHTML = `
-                <a href="service-detail.html?service=${service.id}">
+                <a href="${typeof serviceDetailHref === 'function' ? serviceDetailHref(service.id) : 'service-detail.html?service=' + encodeURIComponent(service.id)}">
                     <div class="service-image-main">
                         <img src="${service.image}" alt="${service.title}" loading="lazy">
                     </div>

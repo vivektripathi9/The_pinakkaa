@@ -1,0 +1,101 @@
+# =============================================================================
+# Pinakkaa — SEO-friendly service URLs (Apache 2.4+, cPanel / shared hosting)
+#
+# DEPLOY (typical cPanel):
+# - Upload the site so this file sits next to index.html (usually public_html).
+# - Primary domain / addon domain docroot: keep RewriteBase as / below.
+# - If the site lives in a subfolder (e.g. public_html/mybrand/), change
+#   RewriteBase to that folder with leading & trailing slash, e.g. RewriteBase /mybrand/
+# - mod_rewrite is enabled by default on cPanel; if URLs fail, check that
+#   "AllowOverride" includes FileInfo or All for this directory.
+#
+# Optional: if Apache returns 500, your host may block "Options" in .htaccess —
+# remove the next line and try again.
+# =============================================================================
+
+# Stops content negotiation from hijacking paths that mod_rewrite should handle.
+Options -MultiViews
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Main domain at public_html root → leave as /. Subfolder site → /foldername/
+    RewriteBase /
+
+    # -------------------------------------------------------------------------
+    # 301 redirects: legacy ?service=… URLs → canonical SEO paths
+    # %{THE_REQUEST} matches only the real browser request (not internal
+    # rewrites), so no redirect loops. Substring match supports /service-detail
+    # and /subfolder/service-detail on cPanel.
+    # Relative targets + RewriteBase support subdirectory installs.
+    # -------------------------------------------------------------------------
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=website-designing(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ website-designing-agency-in-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=seo-digital-marketing(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ seo-company-in-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=online-reputation-management(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ orm-services-in-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=social-media-optimization(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ social-media-optimization-services-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=search-engine-marketing(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ search-engine-marketing-agency-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=social-media-marketing(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ social-media-marketing-company-in-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=branding-rebranding(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ branding-rebranding-agency-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=display-advertising(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ display-advertising-agency-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=ecommerce-solutions(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ ecommerce-marketing-agency-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=pr-marketing-services(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ pr-and-marketing-agency-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=software-development(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ software-development-company-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=api-integration(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ api-integration-services-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=email-marketing(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ email-marketing-company-in-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=sms-marketing(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ sms-marketing-company-in-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=whatsapp-marketing(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ whatsapp-marketing-services-bangalore? [R=301,L]
+
+    RewriteCond %{THE_REQUEST} service-detail\.html\?service=shopify-website-development(&|\s) [NC]
+    RewriteRule ^service-detail\.html$ shopify-website-development-services-in-bangalore? [R=301,L]
+
+    # -------------------------------------------------------------------------
+    # Internal rewrites: SEO paths → service-detail.html?service=…
+    # Address bar stays on the clean URL. [NC] helps with odd casing.
+    # -------------------------------------------------------------------------
+
+    RewriteRule ^website-designing-agency-in-bangalore/?$ service-detail.html?service=website-designing [L,NC]
+    RewriteRule ^seo-company-in-bangalore/?$ service-detail.html?service=seo-digital-marketing [L,NC]
+    RewriteRule ^orm-services-in-bangalore/?$ service-detail.html?service=online-reputation-management [L,NC]
+    RewriteRule ^social-media-optimization-services-bangalore/?$ service-detail.html?service=social-media-optimization [L,NC]
+    RewriteRule ^search-engine-marketing-agency-bangalore/?$ service-detail.html?service=search-engine-marketing [L,NC]
+    RewriteRule ^social-media-marketing-company-in-bangalore/?$ service-detail.html?service=social-media-marketing [L,NC]
+    RewriteRule ^branding-rebranding-agency-bangalore/?$ service-detail.html?service=branding-rebranding [L,NC]
+    RewriteRule ^display-advertising-agency-bangalore/?$ service-detail.html?service=display-advertising [L,NC]
+    RewriteRule ^ecommerce-marketing-agency-bangalore/?$ service-detail.html?service=ecommerce-solutions [L,NC]
+    RewriteRule ^pr-and-marketing-agency-bangalore/?$ service-detail.html?service=pr-marketing-services [L,NC]
+    RewriteRule ^software-development-company-bangalore/?$ service-detail.html?service=software-development [L,NC]
+    RewriteRule ^api-integration-services-bangalore/?$ service-detail.html?service=api-integration [L,NC]
+    RewriteRule ^email-marketing-company-in-bangalore/?$ service-detail.html?service=email-marketing [L,NC]
+    RewriteRule ^sms-marketing-company-in-bangalore/?$ service-detail.html?service=sms-marketing [L,NC]
+    RewriteRule ^whatsapp-marketing-services-bangalore/?$ service-detail.html?service=whatsapp-marketing [L,NC]
+    RewriteRule ^shopify-website-development-services-in-bangalore/?$ service-detail.html?service=shopify-website-development [L,NC]
+</IfModule>

@@ -1,8 +1,9 @@
 // Service Detail Page Handler
 document.addEventListener('DOMContentLoaded', function() {
-    // Get service ID from URL parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const serviceId = urlParams.get('service');
+    // Query (?service=) or clean SEO path (see seo-service-urls.js + .htaccess)
+    const serviceId = typeof serviceIdFromUrl === 'function'
+        ? serviceIdFromUrl()
+        : new URLSearchParams(window.location.search).get('service');
     
     if (!serviceId) {
         // Redirect to services page if no service ID
@@ -672,7 +673,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const otherServices = servicesData.filter(s => s.id !== serviceId).slice(0, 5);
         
         sidebarServicesList.innerHTML = otherServices.map(s => 
-            `<li><a href="service-detail.html?service=${s.id}">${s.title}</a></li>`
+            `<li><a href="${typeof serviceDetailHref === 'function' ? serviceDetailHref(s.id) : 'service-detail.html?service=' + encodeURIComponent(s.id)}">${s.title}</a></li>`
         ).join('');
     }
     
@@ -790,7 +791,7 @@ function loadRelatedServices(currentService) {
         </h3>
         <div class="related-services-grid">
             ${otherServices.map((service, index) => `
-                <a href="service-detail.html?service=${service.id}" class="related-service-card fade-in" style="animation-delay: ${index * 0.1}s">
+                <a href="${typeof serviceDetailHref === 'function' ? serviceDetailHref(service.id) : 'service-detail.html?service=' + encodeURIComponent(service.id)}" class="related-service-card fade-in" style="animation-delay: ${index * 0.1}s">
                     <div class="related-service-image">
                         ${service.video ? `
                             <video autoplay loop muted playsinline>

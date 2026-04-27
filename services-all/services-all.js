@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.servicesData.forEach((svc) => {
     const link = document.createElement('a');
-    link.href = `service-detail.html?service=${encodeURIComponent(svc.id)}`;
+    link.href =
+      typeof serviceDetailHref === 'function'
+        ? serviceDetailHref(svc.id)
+        : `service-detail.html?service=${encodeURIComponent(svc.id)}`;
     link.className = 'services-all-card';
 
     const media = document.createElement('div');
