@@ -12,17 +12,17 @@
         'online-reputation-management': '/orm-services-in-bangalore',
         'social-media-optimization': '/social-media-optimization-services-bangalore',
         'search-engine-marketing': '/search-engine-marketing-agency-bangalore',
-        'social-media-marketing': '/social-media-marketing-company-in-bangalore',
+        'social-media-marketing': '/social-media-marketing-agency-bangalore',
         'branding-rebranding': '/branding-rebranding-agency-bangalore',
         'display-advertising': '/display-advertising-agency-bangalore',
         'ecommerce-solutions': '/ecommerce-marketing-agency-bangalore',
         'pr-marketing-services': '/pr-and-marketing-agency-bangalore',
-        'software-development': '/software-development-company-bangalore',
+        'software-development': '/software-development-services-bangalore',
         'api-integration': '/api-integration-services-bangalore',
-        'email-marketing': '/email-marketing-company-in-bangalore',
-        'sms-marketing': '/sms-marketing-company-in-bangalore',
+        'email-marketing': '/email-marketing-services-bangalore',
+        'sms-marketing': '/sms-marketing-services-bangalore',
         'whatsapp-marketing': '/whatsapp-marketing-services-bangalore',
-        'shopify-website-development': '/shopify-website-development-services-in-bangalore'
+        'shopify-website-development': '/shopify-website-development-services-bangalore'
     };
 
     var SEO_PATH_TO_SERVICE_ID = {};

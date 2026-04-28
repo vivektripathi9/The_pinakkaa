@@ -45,7 +45,7 @@ Options -MultiViews
     RewriteRule ^service-detail\.html$ search-engine-marketing-agency-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=social-media-marketing(&|\s) [NC]
-    RewriteRule ^service-detail\.html$ social-media-marketing-company-in-bangalore? [R=301,L]
+    RewriteRule ^service-detail\.html$ social-media-marketing-agency-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=branding-rebranding(&|\s) [NC]
     RewriteRule ^service-detail\.html$ branding-rebranding-agency-bangalore? [R=301,L]
@@ -60,22 +60,29 @@ Options -MultiViews
     RewriteRule ^service-detail\.html$ pr-and-marketing-agency-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=software-development(&|\s) [NC]
-    RewriteRule ^service-detail\.html$ software-development-company-bangalore? [R=301,L]
+    RewriteRule ^service-detail\.html$ software-development-services-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=api-integration(&|\s) [NC]
     RewriteRule ^service-detail\.html$ api-integration-services-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=email-marketing(&|\s) [NC]
-    RewriteRule ^service-detail\.html$ email-marketing-company-in-bangalore? [R=301,L]
+    RewriteRule ^service-detail\.html$ email-marketing-services-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=sms-marketing(&|\s) [NC]
-    RewriteRule ^service-detail\.html$ sms-marketing-company-in-bangalore? [R=301,L]
+    RewriteRule ^service-detail\.html$ sms-marketing-services-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=whatsapp-marketing(&|\s) [NC]
     RewriteRule ^service-detail\.html$ whatsapp-marketing-services-bangalore? [R=301,L]
 
     RewriteCond %{THE_REQUEST} service-detail\.html\?service=shopify-website-development(&|\s) [NC]
-    RewriteRule ^service-detail\.html$ shopify-website-development-services-in-bangalore? [R=301,L]
+    RewriteRule ^service-detail\.html$ shopify-website-development-services-bangalore? [R=301,L]
+
+    # Legacy slug redirects → current canonical slugs
+    RewriteRule ^social-media-marketing-company-in-bangalore/?$ social-media-marketing-agency-bangalore [R=301,L,NC]
+    RewriteRule ^software-development-company-bangalore/?$ software-development-services-bangalore [R=301,L,NC]
+    RewriteRule ^email-marketing-company-in-bangalore/?$ email-marketing-services-bangalore [R=301,L,NC]
+    RewriteRule ^sms-marketing-company-in-bangalore/?$ sms-marketing-services-bangalore [R=301,L,NC]
+    RewriteRule ^shopify-website-development-services-in-bangalore/?$ shopify-website-development-services-bangalore [R=301,L,NC]
 
     # -------------------------------------------------------------------------
     # Internal rewrites: SEO paths → service-detail.html?service=…
@@ -87,15 +94,15 @@ Options -MultiViews
     RewriteRule ^orm-services-in-bangalore/?$ service-detail.html?service=online-reputation-management [L,NC]
     RewriteRule ^social-media-optimization-services-bangalore/?$ service-detail.html?service=social-media-optimization [L,NC]
     RewriteRule ^search-engine-marketing-agency-bangalore/?$ service-detail.html?service=search-engine-marketing [L,NC]
-    RewriteRule ^social-media-marketing-company-in-bangalore/?$ service-detail.html?service=social-media-marketing [L,NC]
+    RewriteRule ^social-media-marketing-agency-bangalore/?$ service-detail.html?service=social-media-marketing [L,NC]
     RewriteRule ^branding-rebranding-agency-bangalore/?$ service-detail.html?service=branding-rebranding [L,NC]
     RewriteRule ^display-advertising-agency-bangalore/?$ service-detail.html?service=display-advertising [L,NC]
     RewriteRule ^ecommerce-marketing-agency-bangalore/?$ service-detail.html?service=ecommerce-solutions [L,NC]
     RewriteRule ^pr-and-marketing-agency-bangalore/?$ service-detail.html?service=pr-marketing-services [L,NC]
-    RewriteRule ^software-development-company-bangalore/?$ service-detail.html?service=software-development [L,NC]
+    RewriteRule ^software-development-services-bangalore/?$ service-detail.html?service=software-development [L,NC]
     RewriteRule ^api-integration-services-bangalore/?$ service-detail.html?service=api-integration [L,NC]
-    RewriteRule ^email-marketing-company-in-bangalore/?$ service-detail.html?service=email-marketing [L,NC]
-    RewriteRule ^sms-marketing-company-in-bangalore/?$ service-detail.html?service=sms-marketing [L,NC]
+    RewriteRule ^email-marketing-services-bangalore/?$ service-detail.html?service=email-marketing [L,NC]
+    RewriteRule ^sms-marketing-services-bangalore/?$ service-detail.html?service=sms-marketing [L,NC]
     RewriteRule ^whatsapp-marketing-services-bangalore/?$ service-detail.html?service=whatsapp-marketing [L,NC]
-    RewriteRule ^shopify-website-development-services-in-bangalore/?$ service-detail.html?service=shopify-website-development [L,NC]
+    RewriteRule ^shopify-website-development-services-bangalore/?$ service-detail.html?service=shopify-website-development [L,NC]
 </IfModule>
