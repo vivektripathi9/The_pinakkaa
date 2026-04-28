@@ -32,8 +32,60 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Benefits:', service.benefits);
     console.log('FAQs:', service.faqs);
     
+    // SEO metadata for each service detail page
+    const pageTitle = `${service.title} in Bangalore | Pinakkaa`;
+    const pageDescription = (service.shortDescription || service.fullDescription || '')
+        .toString()
+        .trim()
+        .replace(/\s+/g, ' ')
+        .slice(0, 160);
+    const canonicalPath = typeof serviceDetailHref === 'function'
+        ? serviceDetailHref(service.id)
+        : '/service-detail.html?service=' + encodeURIComponent(service.id);
+    const canonicalUrl = new URL(canonicalPath, window.location.origin).toString();
+
     // Update page title
-    document.title = `${service.title} - Pinakkaa`;
+    document.title = pageTitle;
+
+    const setHeadTag = (selector, createTag, attrs) => {
+        let el = document.head.querySelector(selector);
+        if (!el) {
+            el = document.createElement(createTag);
+            document.head.appendChild(el);
+        }
+        Object.keys(attrs).forEach((key) => {
+            el.setAttribute(key, attrs[key]);
+        });
+    };
+
+    setHeadTag('meta[name="description"]', 'meta', {
+        name: 'description',
+        content: pageDescription
+    });
+    setHeadTag('meta[name="robots"]', 'meta', {
+        name: 'robots',
+        content: 'index,follow'
+    });
+    setHeadTag('link[rel="canonical"]', 'link', {
+        rel: 'canonical',
+        href: canonicalUrl
+    });
+    setHeadTag('meta[property="og:title"]', 'meta', {
+        property: 'og:title',
+        content: pageTitle
+    });
+    setHeadTag('meta[property="og:description"]', 'meta', {
+        property: 'og:description',
+        content: pageDescription
+    });
+    setHeadTag('meta[property="og:url"]', 'meta', {
+        property: 'og:url',
+        content: canonicalUrl
+    });
+    setHeadTag('meta[property="og:type"]', 'meta', {
+        property: 'og:type',
+        content: 'website'
+    });
     
     // Update hero section
     const serviceTitleText = document.getElementById('serviceTitleText');
