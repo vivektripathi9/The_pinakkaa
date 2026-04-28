@@ -61,9 +61,10 @@
 .has-dropdown .dropdown {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     display: none;
-    min-width: 260px;
+    width: min(560px, calc(100vw - 40px));
     padding: 10px;
     background: rgba(7, 0, 22, 0.96);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -71,10 +72,12 @@
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(10px);
     z-index: 1002;
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 4px 8px;
 }
 
 .has-dropdown:hover .dropdown {
-    display: block;
+    display: grid;
 }
 
 .has-dropdown .dropdown a {
