@@ -85,7 +85,7 @@ const servicesData = [
     },
     {
         id: 'seo-digital-marketing',
-        title: 'SEO & Digital Marketing',
+        title: 'Search engine optimization',
         shortDescription: 'Enhance your organic search presence with proven SEO strategies that improve visibility, drive quality traffic, and boost your rankings on search engines.',
         image: 'services-section/two.png',
         video: 'components/dynamic_section/GettyImages-1151009350.mp4',
