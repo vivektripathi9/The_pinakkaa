@@ -100,7 +100,19 @@
     text-align: center;
 }
 
-/* Form row */
+/* CTA primary action(s) */
+.cta-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 8px;
+}
+
+/* Legacy form row — kept so older markup / assets still lay out */
 .cta-form {
     display: flex;
     flex-direction: row;
@@ -164,6 +176,38 @@
     box-shadow: none;
 }
 
+.cta-get-started-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    min-height: 48px;
+    background: linear-gradient(135deg, #a78bfa, #f472b6);
+    border: none;
+    border-radius: 12px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.2s ease;
+    box-shadow: none;
+}
+
+.cta-get-started-button:hover {
+    transform: translateY(-1px);
+}
+
+.cta-get-started-button:active {
+    transform: translateY(0);
+}
+
+.cta-get-started-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.35);
+}
+
 .send-button:active {
     transform: translateY(0);
     box-shadow: none;
@@ -200,7 +244,8 @@
     .cta-section {
         padding: 56px 16px;
     }
-    .cta-form {
+    .cta-form,
+    .cta-actions {
         max-width: 100%;
     }
 }
@@ -219,12 +264,14 @@
         width: 100%;
         height: 100%;
     }
-    .cta-form {
+    .cta-form,
+    .cta-actions {
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
     }
-    .send-button {
+    .send-button,
+    .cta-get-started-button {
         width: 100%;
     }
 }
@@ -257,7 +304,8 @@
     }
 
     /* Widen the form row to accommodate wider input + smaller button */
-    .cta-section .cta-form {
+    .cta-section .cta-form,
+    .cta-section .cta-actions {
         max-width: 600px;
     }
 
@@ -271,22 +319,174 @@
     }
 
     /* Button: 193.2936x40, pill radius */
-    .cta-section .send-button {
-        width: 150px;
+    .cta-section .send-button,
+    .cta-section .cta-get-started-button {
+        width: auto;
+        min-width: 160px;
         min-height: 40px;
         height: 40px;
         border-radius: 999px;
-        padding: 0;
+        padding: 0 28px;
     }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-    .send-button {
+    .send-button,
+    .cta-get-started-button {
         transition: none;
     }
     .email-input {
         transition: none;
     }
+}
+
+/* Signup modal (opened from CTA “Get Started”) */
+/* Scrollable overlay: tall forms stay fully visible; centered when there is room */
+.signup-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2200;
+    display: none;
+    box-sizing: border-box;
+    padding: max(16px, env(safe-area-inset-top, 16px))
+        max(16px, env(safe-area-inset-right, 16px))
+        max(20px, env(safe-area-inset-bottom, 20px))
+        max(16px, env(safe-area-inset-left, 16px));
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.signup-modal.signup-modal--open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.signup-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: rgba(5, 0, 12, 0.72);
+    backdrop-filter: blur(6px);
+}
+
+.signup-modal-panel {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 440px;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 28px 24px 24px;
+    border-radius: 16px;
+    background: linear-gradient(160deg, #1a0a24 0%, #130818 55%, #0d0014 100%);
+    border: 1px solid rgba(167, 139, 250, 0.25);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), 0 0 48px rgba(167, 139, 250, 0.12);
+    overflow: visible;
+}
+
+.signup-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.signup-modal-close:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.signup-modal-title {
+    margin: 0 40px 8px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+}
+
+.signup-modal-text {
+    margin: 0 0 22px;
+    font-size: 15px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.signup-modal-field {
+    margin-bottom: 16px;
+}
+
+.signup-modal-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.signup-modal-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+    font-size: 16px;
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.signup-modal-input::placeholder {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.signup-modal-input:focus {
+    border-color: rgba(167, 139, 250, 0.65);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.18);
+}
+
+.signup-modal-submit {
+    margin-top: 8px;
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #a78bfa, #f472b6);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Montserrat", sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.signup-modal-submit:hover {
+    transform: translateY(-1px);
+}
+
+.signup-modal-submit:active {
+    transform: translateY(0);
 }
 

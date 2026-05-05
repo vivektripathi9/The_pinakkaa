@@ -164,13 +164,14 @@
                 const submitBtn = form.querySelector('button[type="submit"]');
                 setButtonLoading(submitBtn, true, 'Sending...');
 
-                const nameInput = form.querySelector('input[name="name"]');
-                const emailInput = form.querySelector('input[name="email"], input[type="email"]');
-                const name = nameInput ? nameInput.value.trim() : '';
-                const email = emailInput ? emailInput.value.trim() : '';
+                const formData = new FormData(form);
+                const name = (formData.get('name') || '').toString().trim();
+                const email = (formData.get('email') || '').toString().trim();
+                const phone = (formData.get('phone') || '').toString().trim();
+                const subject = (formData.get('subject') || '').toString().trim();
 
-                if (!name || !email) {
-                    alert('Please enter both name and email.');
+                if (!name || !email || !phone || !subject) {
+                    alert('Please fill in name, phone number, email, and subject.');
                     setButtonLoading(submitBtn, false);
                     return;
                 }
@@ -180,10 +181,16 @@
                         formType: 'Signup Form',
                         name: name,
                         email: email,
-                        subject: 'New signup',
-                        message: 'New signup received from website'
+                        phone: phone,
+                        subject: subject,
+                        message:
+                            'New signup (Get Started)\nSubject: ' +
+                            subject +
+                            '\nPhone: ' +
+                            phone
                     });
                     alert('Signup submitted successfully.');
+                    form.dispatchEvent(new CustomEvent('pinakkaa-signup-success', { bubbles: true }));
                     form.reset();
                 } catch (err) {
                     alert('Unable to send right now. Please try again.');

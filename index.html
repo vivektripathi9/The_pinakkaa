@@ -587,9 +587,8 @@
                 
                 <p class="cta-subtitle">Get started with Pinakkaa and stay on top of your rankings in no time!</p>
                 
-                <div class="cta-form">
-                    <input type="email" class="email-input" placeholder="Enter your Email ID" required>
-                    <button type="submit" class="send-button">Send</button>
+                <div class="cta-actions">
+                    <button type="button" class="cta-get-started-button" data-signup-modal-open>Get Started</button>
                 </div>
             </div>
         </div>
@@ -690,13 +689,42 @@
             </div>
         </div>
     </footer>
-    
+
+    <div id="signupModal" class="signup-modal" role="dialog" aria-modal="true" aria-labelledby="signupModalTitle" aria-hidden="true">
+        <div class="signup-modal-backdrop" data-signup-modal-close tabindex="-1" aria-hidden="true"></div>
+        <div class="signup-modal-panel">
+            <button type="button" class="signup-modal-close" data-signup-modal-close aria-label="Close dialog">&times;</button>
+            <h2 id="signupModalTitle" class="signup-modal-title">Get started</h2>
+            <p class="signup-modal-text">Tell us how to reach you and we will get back to you shortly.</p>
+            <form id="signupForm" class="signup-form" action="#" method="post" data-emailjs="signup">
+                <div class="signup-modal-field">
+                    <label class="signup-modal-label" for="signupName">Full name</label>
+                    <input type="text" id="signupName" name="name" class="signup-modal-input" placeholder="Your name" required autocomplete="name">
+                </div>
+                <div class="signup-modal-field">
+                    <label class="signup-modal-label" for="signupPhone">Phone number</label>
+                    <input type="tel" id="signupPhone" name="phone" class="signup-modal-input" placeholder="Your phone number" required autocomplete="tel">
+                </div>
+                <div class="signup-modal-field">
+                    <label class="signup-modal-label" for="signupEmail">Email address</label>
+                    <input type="email" id="signupEmail" name="email" class="signup-modal-input" placeholder="your@email.com" required autocomplete="email">
+                </div>
+                <div class="signup-modal-field">
+                    <label class="signup-modal-label" for="signupSubject">Subject</label>
+                    <input type="text" id="signupSubject" name="subject" class="signup-modal-input" placeholder="What is this regarding?" required autocomplete="off">
+                </div>
+                <button type="submit" class="signup-modal-submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
     <script src="navbar/navbar.js" defer></script>
     <script src="hero-section/hero.js" defer></script>
     <script src="testimonial-section/testimonial-section.js" defer></script>
     <script src="email-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script src="email-setup.js"></script>
+    <script src="cta-section/signup-modal.js" defer></script>
     <script src="typography.js" defer></script>
     <script src="performance.js" defer></script>
 </body>
