@@ -167,11 +167,18 @@
                 const formData = new FormData(form);
                 const name = (formData.get('name') || '').toString().trim();
                 const email = (formData.get('email') || '').toString().trim();
-                const phone = (formData.get('phone') || '').toString().trim();
+                const phoneRaw = (formData.get('phone') || '').toString();
+                const phoneDigits = phoneRaw.replace(/\D/g, '');
                 const subject = (formData.get('subject') || '').toString().trim();
 
-                if (!name || !email || !phone || !subject) {
+                if (!name || !email || !phoneRaw.trim() || !subject) {
                     alert('Please fill in name, phone number, email, and subject.');
+                    setButtonLoading(submitBtn, false);
+                    return;
+                }
+
+                if (phoneDigits.length !== 10) {
+                    alert('Please enter exactly 10 digits for your phone number.');
                     setButtonLoading(submitBtn, false);
                     return;
                 }
@@ -181,13 +188,13 @@
                         formType: 'Signup Form',
                         name: name,
                         email: email,
-                        phone: phone,
+                        phone: phoneDigits,
                         subject: subject,
                         message:
                             'New signup (Get Started)\nSubject: ' +
                             subject +
                             '\nPhone: ' +
-                            phone
+                            phoneDigits
                     });
                     alert('Signup submitted successfully.');
                     form.dispatchEvent(new CustomEvent('pinakkaa-signup-success', { bubbles: true }));

@@ -703,7 +703,7 @@
                 </div>
                 <div class="signup-modal-field">
                     <label class="signup-modal-label" for="signupPhone">Phone number</label>
-                    <input type="tel" id="signupPhone" name="phone" class="signup-modal-input" placeholder="Your phone number" required autocomplete="tel">
+                    <input type="tel" id="signupPhone" name="phone" class="signup-modal-input" placeholder="10-digit mobile number" required inputmode="numeric" autocomplete="tel-national" maxlength="10" minlength="10" pattern="[0-9]{10}" title="Enter exactly 10 digits">
                 </div>
                 <div class="signup-modal-field">
                     <label class="signup-modal-label" for="signupEmail">Email address</label>

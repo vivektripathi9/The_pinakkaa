@@ -33,9 +33,30 @@
         lastFocusEl = null;
     }
 
+    function normalizeSignupPhoneInput(input) {
+        if (!input) return;
+        var digits = input.value.replace(/\D/g, '').slice(0, 10);
+        input.value = digits;
+    }
+
+    function wireSignupPhoneField() {
+        var phoneEl = document.getElementById('signupPhone');
+        if (!phoneEl) return;
+        function sync() {
+            normalizeSignupPhoneInput(phoneEl);
+        }
+        phoneEl.addEventListener('input', sync);
+        phoneEl.addEventListener('blur', sync);
+        phoneEl.addEventListener('paste', function () {
+            window.requestAnimationFrame(sync);
+        });
+    }
+
     function init() {
         var modal = getModal();
         if (!modal) return;
+
+        wireSignupPhoneField();
 
         document.addEventListener('click', function (e) {
             var opener = e.target.closest('[data-signup-modal-open]');
