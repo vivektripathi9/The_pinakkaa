@@ -24,17 +24,27 @@
 
   const allowAutoplay = !(prefersReducedMotion || saveData);
 
+  const isHero = (video) => Boolean(video.closest && video.closest('.hero-section'));
+
   const prepare = (video) => {
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
-    video.autoplay = true;
     video.controls = false;
-    video.preload = 'auto';
+    // The autoplay attribute makes Chrome download the file immediately.
+    // Keep that for the hero only. Other videos stay unloaded until they play.
+    if (isHero(video)) {
+      video.autoplay = true;
+      video.preload = 'auto';
+      video.setAttribute('autoplay', '');
+    } else if (!onScreen(video)) {
+      video.autoplay = false;
+      video.preload = 'none';
+      video.removeAttribute('autoplay');
+    }
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
-    video.setAttribute('autoplay', '');
   };
 
   const onScreen = (video) => {
@@ -48,6 +58,9 @@
     const rect = video.getBoundingClientRect();
     const visible = rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
     if (!force && !visible && rect.height > 0) return;
+    video.autoplay = true;
+    video.preload = 'auto';
+    video.setAttribute('autoplay', '');
     const pending = video.play();
     if (pending && typeof pending.catch === 'function') pending.catch(() => {});
   };
@@ -89,6 +102,7 @@
             startVideo(video, true);
           } else if (!onScreen(video)) {
             video.pause();
+            if (!isHero(video)) video.preload = 'none';
           }
         }
       },
