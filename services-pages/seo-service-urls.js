@@ -1,7 +1,7 @@
 /**
- * Canonical SEO paths ↔ service ids (must match .htaccess rules).
- * Local preview: use "npx serve" (see ../serve.json) or Apache; plain
- * "python -m http.server" has no URL rewriting — use npx serve or XAMPP.
+ * Service links must always point at service-detail.html, which is a real file.
+ * Pretty paths below are public aliases. Each one also has a folder with
+ * index.html so the page still opens when the host does not rewrite URLs.
  */
 (function () {
     'use strict';
@@ -34,10 +34,27 @@
 
     window.SEO_PATH_TO_SERVICE_ID = SEO_PATH_TO_SERVICE_ID;
 
+    function serviceIdFromValue(value) {
+        var raw = String(value || '').trim();
+        if (!raw) return '';
+        if (raw.charAt(0) === '/' || raw.indexOf('http') === 0) {
+            var path = raw.split('?')[0].replace(/\/+$/, '');
+            var seg = path.split('/').pop();
+            return SEO_PATH_TO_SERVICE_ID[seg] || '';
+        }
+        return SERVICE_ID_TO_SEO_PATH[raw] ? raw : '';
+    }
+
+    // Clickable links. Never return a pretty path; those are not files.
     window.serviceDetailHref = function (serviceId) {
-        var p = SERVICE_ID_TO_SEO_PATH[serviceId];
-        if (p) return p;
-        return '/service-detail.html?service=' + encodeURIComponent(serviceId);
+        var id = serviceIdFromValue(serviceId);
+        if (!id) return 'services.html';
+        return 'service-detail.html?service=' + encodeURIComponent(id);
+    };
+
+    window.serviceCanonicalPath = function (serviceId) {
+        var id = serviceIdFromValue(serviceId);
+        return SERVICE_ID_TO_SEO_PATH[id] || '/services.html';
     };
 
     window.serviceIdFromUrl = function () {

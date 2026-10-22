@@ -22,41 +22,115 @@
   // Some browsers expose Data Saver via navigator.connection.saveData
   const saveData = Boolean(navigator.connection && navigator.connection.saveData);
 
-  const videos = Array.from(document.querySelectorAll('video'));
-  if (videos.length === 0) return;
+  const allowAutoplay = !(prefersReducedMotion || saveData);
 
-  // Avoid aggressive preloading for decorative/background videos
-  for (const v of videos) {
-    if (!v.hasAttribute('preload')) v.preload = 'metadata';
-    // If user prefers reduced motion or wants to save data, don't autoplay decorative videos.
-    if ((prefersReducedMotion || saveData) && v.autoplay) {
-      v.autoplay = false;
-      v.pause();
+  const prepare = (video) => {
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.autoplay = true;
+    video.controls = false;
+    video.preload = 'auto';
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('autoplay', '');
+  };
+
+  const onScreen = (video) => {
+    const rect = video.getBoundingClientRect();
+    return rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
+  };
+
+  const startVideo = (video, force) => {
+    if (!allowAutoplay) return;
+    prepare(video);
+    const rect = video.getBoundingClientRect();
+    const visible = rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
+    if (!force && !visible && rect.height > 0) return;
+    const pending = video.play();
+    if (pending && typeof pending.catch === 'function') pending.catch(() => {});
+  };
+
+  const watchVideo = (video) => {
+    if (!video || video.dataset.autoplayReady === '1') return;
+    video.dataset.autoplayReady = '1';
+    prepare(video);
+
+    if (!allowAutoplay) {
+      video.autoplay = false;
+      video.pause();
+      return;
     }
+
+    startVideo(video);
+    video.addEventListener('loadeddata', () => startVideo(video));
+    video.addEventListener('canplay', () => startVideo(video));
+
+    let lastResume = 0;
+    video.addEventListener('pause', () => {
+      if (!onScreen(video)) return;
+      const now = Date.now();
+      if (now - lastResume < 500) return;
+      lastResume = now;
+      startVideo(video);
+    });
+
+    if (observer) observer.observe(video);
+  };
+
+  let observer = null;
+  if ('IntersectionObserver' in window) {
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const video = entry.target;
+          if (entry.isIntersecting) {
+            startVideo(video, true);
+          } else if (!onScreen(video)) {
+            video.pause();
+          }
+        }
+      },
+      { rootMargin: '200px 0px', threshold: 0.01 }
+    );
   }
 
-  if (!('IntersectionObserver' in window)) return;
+  const watchTree = (root) => {
+    if (!root) return;
+    if (root.nodeType === 1 && root.tagName === 'VIDEO') watchVideo(root);
+    if (typeof root.querySelectorAll === 'function') {
+      root.querySelectorAll('video').forEach(watchVideo);
+    }
+  };
 
-  const io = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        const v = entry.target;
-        const shouldPlay = entry.isIntersecting && entry.intersectionRatio > 0.15;
+  watchTree(document);
 
-        if (shouldPlay) {
-          // Only attempt play if it's meant to loop/autoplay and not reduced-motion/data-saver
-          if ((v.loop || v.autoplay) && !(prefersReducedMotion || saveData)) {
-            const p = v.play();
-            if (p && typeof p.catch === 'function') p.catch(() => {});
-          }
-        } else {
-          v.pause();
-        }
+  if ('MutationObserver' in window) {
+    const added = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        mutation.addedNodes.forEach(watchTree);
       }
-    },
-    { threshold: [0, 0.15, 0.5] }
-  );
+    });
+    added.observe(document.documentElement, { childList: true, subtree: true });
+  }
 
-  for (const v of videos) io.observe(v);
+  let syncScheduled = false;
+  const syncVisible = () => {
+    document.querySelectorAll('video').forEach((video) => {
+      if (onScreen(video)) startVideo(video, true);
+    });
+  };
+  const scheduleSync = () => {
+    if (syncScheduled) return;
+    syncScheduled = true;
+    requestAnimationFrame(() => {
+      syncScheduled = false;
+      syncVisible();
+    });
+  };
+  window.addEventListener('scroll', scheduleSync, { passive: true });
+  window.addEventListener('resize', scheduleSync);
+  window.addEventListener('load', syncVisible);
 })();
 

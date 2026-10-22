@@ -7,6 +7,9 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    /* Global `section { content-visibility: auto }` makes Chrome skip this
+       video and paint its native play button instead of autoplaying. */
+    content-visibility: visible;
 }
 
 .video-background {
@@ -22,6 +25,20 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    pointer-events: none;
+}
+
+/* Chrome draws this overlay when autoplay has not started yet. */
+.video-background video::-webkit-media-controls,
+.video-background video::-webkit-media-controls-enclosure,
+.video-background video::-webkit-media-controls-panel,
+.video-background video::-webkit-media-controls-play-button,
+.video-background video::-webkit-media-controls-start-playback-button,
+.video-background video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+    -webkit-appearance: none;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 .video-overlay {

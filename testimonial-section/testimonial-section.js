@@ -58,9 +58,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Pause auto-rotation on hover
+    // Pause auto-rotation on hover for devices that actually hover.
     const carousel = document.querySelector('.testimonials-carousel');
-    if (carousel) {
+    const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (carousel && canHover) {
         carousel.addEventListener('mouseenter', () => {
             clearInterval(autoRotateInterval);
         });
@@ -68,6 +69,35 @@ document.addEventListener('DOMContentLoaded', function() {
         carousel.addEventListener('mouseleave', () => {
             startAutoRotate();
         });
+    }
+
+    // Swipe between quotes on touch screens.
+    if (carousel) {
+        let startX = 0;
+        let startY = 0;
+
+        carousel.addEventListener('touchstart', (event) => {
+            const touch = event.changedTouches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            clearInterval(autoRotateInterval);
+        }, { passive: true });
+
+        carousel.addEventListener('touchend', (event) => {
+            const touch = event.changedTouches[0];
+            const deltaX = touch.clientX - startX;
+            const deltaY = touch.clientY - startY;
+
+            if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX < 0) {
+                    nextTestimonial();
+                } else {
+                    currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+                    showTestimonial(currentIndex);
+                }
+            }
+            resetAutoRotate();
+        }, { passive: true });
     }
 
     // Initialize: Show first testimonial and start auto-rotation

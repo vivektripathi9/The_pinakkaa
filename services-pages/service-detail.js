@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .trim()
         .replace(/\s+/g, ' ')
         .slice(0, 160);
-    const canonicalPath = typeof serviceDetailHref === 'function'
-        ? serviceDetailHref(service.id)
+    const canonicalPath = typeof serviceCanonicalPath === 'function'
+        ? serviceCanonicalPath(service.id)
         : '/service-detail.html?service=' + encodeURIComponent(service.id);
     const canonicalUrl = new URL(canonicalPath, window.location.origin).toString();
 
@@ -558,9 +558,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 source.src = service.video;
                 serviceVideoSrc.load();
             }
+            serviceVideoSrc.muted = true;
+            serviceVideoSrc.defaultMuted = true;
+            serviceVideoSrc.playsInline = true;
+            serviceVideoSrc.autoplay = true;
+            serviceVideoSrc.controls = false;
+            serviceVideoSrc.setAttribute('muted', '');
+            serviceVideoSrc.setAttribute('playsinline', '');
             serviceVideoSrc.setAttribute('aria-label', service.title);
             serviceVideoSrc.style.display = 'block';
             serviceImageSrc.style.display = 'none';
+            const startServiceVideo = () => {
+                serviceVideoSrc.muted = true;
+                const pending = serviceVideoSrc.play();
+                if (pending && typeof pending.catch === 'function') pending.catch(() => {});
+            };
+            serviceVideoSrc.addEventListener('loadeddata', startServiceVideo);
+            startServiceVideo();
         } else if (service.image) {
             // Fallback to image if no video
             serviceImageSrc.src = service.image;
@@ -913,7 +927,7 @@ function loadRelatedServices(currentService) {
                 <a href="${typeof serviceDetailHref === 'function' ? serviceDetailHref(service.id) : 'service-detail.html?service=' + encodeURIComponent(service.id)}" class="related-service-card fade-in" style="animation-delay: ${index * 0.1}s">
                     <div class="related-service-image">
                         ${service.video ? `
-                            <video autoplay loop muted playsinline>
+                            <video autoplay loop muted playsinline webkit-playsinline preload="auto" disablepictureinpicture disableremoteplayback>
                                 <source src="${service.video}" type="video/mp4">
                             </video>
                         ` : service.image ? `

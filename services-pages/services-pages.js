@@ -308,7 +308,7 @@ const servicesData = [
         faqs: [
             {
                 question: 'How quickly can you respond to negative reviews?',
-                answer: 'Our 24/7 monitoring system alerts us immediately to new reviews and mentions. We typically respond to negative reviews within 2-4 hours during business hours, and within 24 hours for urgent issues. Response time is critical for reputation management.'
+                answer: 'Our 24/7 monitoring system alerts us immediately to new reviews and mentions. We typically respond to negative reviews within 2-4 hours, and within 24 hours for urgent issues. Response time is critical for reputation management.'
             },
             {
                 question: 'Can you remove negative reviews?',
