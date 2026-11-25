@@ -1,0 +1,164 @@
+/* Clients / brands marquee */
+
+.clients-section {
+    width: 100%;
+    background: linear-gradient(180deg, #070016 0%, #0a0618 100%);
+    padding: 64px 0 56px;
+    overflow: hidden;
+}
+
+.clients-header {
+    max-width: 900px;
+    margin: 0 auto 36px;
+    padding: 0 24px;
+    text-align: center;
+}
+
+.clients-kicker {
+    color: #c4b5fd;
+    margin-bottom: 10px;
+}
+
+.clients-heading {
+    color: #ffffff;
+    margin: 0;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: -0.02em;
+    text-transform: none;
+}
+
+.clients-sub {
+    margin: 12px auto 0;
+    max-width: 520px;
+    color: #9ca3af;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.clients-marquee {
+    position: relative;
+    width: 100%;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.clients-track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: clients-marquee 90s linear infinite;
+    will-change: transform;
+}
+
+.clients-set {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    padding-right: 48px;
+}
+
+.clients-marquee:hover .clients-track {
+    animation-play-state: paused;
+}
+
+.clients-item {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 110px;
+    padding: 0;
+    background: none;
+}
+
+.clients-item--on-light {
+    width: 200px;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+.clients-item img {
+    display: block;
+    max-height: 88px;
+    max-width: 200px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+}
+
+.clients-item--on-light img {
+    max-height: 72px;
+    max-width: 160px;
+}
+
+.clients-item:hover img {
+    transform: scale(1.05);
+}
+
+@keyframes clients-marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .clients-track {
+        animation: none;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 20px;
+        gap: 28px 36px;
+    }
+
+    .clients-track .clients-set:last-child {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .clients-section {
+        padding: 48px 0 40px;
+    }
+
+    .clients-header {
+        margin-bottom: 28px;
+    }
+
+    .clients-track {
+        animation-duration: 70s;
+    }
+
+    .clients-set {
+        gap: 32px;
+        padding-right: 32px;
+    }
+
+    .clients-item {
+        height: 84px;
+        padding: 0;
+    }
+
+    .clients-item--on-light {
+        width: 156px;
+        padding: 12px 14px;
+        border-radius: 10px;
+    }
+
+    .clients-item img {
+        max-height: 64px;
+        max-width: 150px;
+    }
+
+    .clients-item--on-light img {
+        max-height: 56px;
+        max-width: 124px;
+    }
+}
