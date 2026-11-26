@@ -1,13 +1,35 @@
 /* Clients / brands marquee */
 
 .clients-section {
+    position: relative;
     width: 100%;
-    background: linear-gradient(180deg, #070016 0%, #0a0618 100%);
+    background-color: #070016;
     padding: 64px 0 56px;
     overflow: hidden;
 }
 
+.clients-bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.clients-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(7, 0, 22, 0.72) 0%, rgba(10, 6, 24, 0.86) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
 .clients-header {
+    position: relative;
+    z-index: 2;
     max-width: 900px;
     margin: 0 auto 36px;
     padding: 0 24px;
@@ -37,17 +59,27 @@
 
 .clients-marquee {
     position: relative;
+    z-index: 2;
     width: 100%;
-    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    overflow: hidden;
+    touch-action: pan-y;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
 .clients-track {
     display: flex;
     width: max-content;
     align-items: center;
-    animation: clients-marquee 90s linear infinite;
+    animation: clients-marquee 100s linear infinite;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
     will-change: transform;
+}
+
+.clients-section.is-paused .clients-track,
+.clients-section.is-offscreen .clients-track {
+    animation-play-state: paused;
 }
 
 .clients-set {
@@ -57,8 +89,14 @@
     padding-right: 48px;
 }
 
-.clients-marquee:hover .clients-track {
-    animation-play-state: paused;
+@media (hover: hover) and (pointer: fine) {
+    .clients-marquee:hover .clients-track {
+        animation-play-state: paused;
+    }
+
+    .clients-item:hover img {
+        transform: scale(1.05);
+    }
 }
 
 .clients-item {
@@ -66,16 +104,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 110px;
-    padding: 10px 14px;
+    min-width: 120px;
+    min-height: 88px;
+    padding: 12px 16px;
     background: none;
     border: 1px solid rgba(255, 255, 255, 0.85);
     border-radius: 10px;
 }
 
 .clients-item--on-light {
-    width: 200px;
-    padding: 16px 20px;
+    min-width: 160px;
+    padding: 14px 18px;
     background: #ffffff;
     border: none;
     border-radius: 12px;
@@ -83,8 +122,8 @@
 
 .clients-item img {
     display: block;
-    max-height: 88px;
-    max-width: 200px;
+    max-height: 72px;
+    max-width: 180px;
     width: auto;
     height: auto;
     object-fit: contain;
@@ -92,20 +131,16 @@
 }
 
 .clients-item--on-light img {
-    max-height: 72px;
-    max-width: 160px;
-}
-
-.clients-item:hover img {
-    transform: scale(1.05);
+    max-height: 64px;
+    max-width: 150px;
 }
 
 @keyframes clients-marquee {
     from {
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
     }
     to {
-        transform: translateX(-50%);
+        transform: translate3d(-50%, 0, 0);
     }
 }
 
@@ -118,7 +153,16 @@
         max-width: 1100px;
         margin: 0 auto;
         padding: 0 20px;
-        gap: 28px 36px;
+        gap: 20px;
+        will-change: auto;
+    }
+
+    .clients-set {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+        padding-right: 0;
+        width: 100%;
     }
 
     .clients-track .clients-set:last-child {
@@ -128,42 +172,89 @@
 
 @media (max-width: 767px) {
     .clients-section {
-        padding: 48px 0 40px;
+        padding: 40px 0 36px;
     }
 
     .clients-header {
-        margin-bottom: 28px;
+        margin-bottom: 22px;
+        padding: 0 16px;
+    }
+
+    .clients-heading {
+        font-size: 26px;
+        line-height: 1.2;
+        text-wrap: balance;
+    }
+
+    .clients-sub {
+        margin-top: 10px;
+        font-size: 13px;
+        line-height: 1.5;
+        max-width: 34ch;
+    }
+
+    .clients-marquee {
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
     }
 
     .clients-track {
-        animation-duration: 70s;
+        animation-duration: 55s;
     }
 
     .clients-set {
-        gap: 32px;
-        padding-right: 32px;
+        gap: 14px;
+        padding-right: 14px;
     }
 
     .clients-item {
-        height: 84px;
+        min-width: 88px;
+        min-height: 60px;
         padding: 8px 10px;
         border-radius: 8px;
     }
 
     .clients-item--on-light {
-        width: 156px;
-        padding: 12px 14px;
+        min-width: 104px;
+        padding: 8px 10px;
         border: none;
-        border-radius: 10px;
+        border-radius: 8px;
     }
 
     .clients-item img {
-        max-height: 64px;
-        max-width: 150px;
+        max-height: 40px;
+        max-width: 100px;
     }
 
     .clients-item--on-light img {
-        max-height: 56px;
-        max-width: 124px;
+        max-height: 36px;
+        max-width: 88px;
+    }
+
+    /* Keep mobile compositing light */
+    .clients-item img {
+        transition: none;
+    }
+}
+
+@media (max-width: 380px) {
+    .clients-heading {
+        font-size: 22px;
+    }
+
+    .clients-item {
+        min-width: 80px;
+        min-height: 54px;
+        padding: 6px 8px;
+    }
+
+    .clients-item img {
+        max-height: 34px;
+        max-width: 86px;
+    }
+
+    .clients-item--on-light img {
+        max-height: 32px;
+        max-width: 78px;
     }
 }

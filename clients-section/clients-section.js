@@ -81,27 +81,49 @@
     "Zed the Baker.png"
   ];
 
-  // Logos that are black / low-contrast on the dark section — always use a white plate.
+  // True black / dark-ink logos only — white plate. Light logos must NOT use a
+  // white plate or they disappear; those get a thin border instead.
   const FORCE_LIGHT_BG = {
     "Atha Constructions.png": true,
     "Blockone Family Office.png": true,
+    "Casatrance.webp": true,
     "Clarion Hotel.png": true,
     "DAMAC.png": true,
     "GO Digital.jpg": true,
     "Gravity Homes.webp": true,
-    "Jankal Group.png": true,
     "Mathura Developers.png": true,
     "My Space Realty.png": true,
+    "Needs3 168.png": true,
     "Niva Earthscape.png": true,
-    "Scent Salon.jpg": true,
     "Teknix Elevators.png": true,
     "The Naturalness.png": true,
-    "Venus Auto Services.png": true
+    "Venus Auto Services.png": true,
+    "Zed the Baker.png": true
   };
 
-  // Already light / readable on dark — never wrap with a white plate.
+  // Light / colorful / gold logos — thin border only, never a white plate.
   const NEVER_LIGHT_BG = {
+    "Abhee Developers.png": true,
+    "Ambika Developers.png": true,
+    "artuzu.webp": true,
+    "Broadwings.png": true,
+    "Carpediem.webp": true,
+    "Gnome.svg": true,
+    "IRA By the Banks.png": true,
+    "Jankal Group.png": true,
+    "Logo-TAE(Black).png": true,
+    "MW Solution.png": true,
+    "Namma Haven.jpg": true,
+    "Natraj Chole Bhature.png": true,
     "PD Design.png": true,
+    "PGR Buildtech.webp": true,
+    "Pratham Motors.webp": true,
+    "Samantha Jagan.png": true,
+    "Scent Salon.jpg": true,
+    "Stories.webp": true,
+    "Stratus.png": true,
+    "Trifecta.png": true,
+    "Vibha Reality.jpeg": true,
     "White Stag.svg": true
   };
 
@@ -127,10 +149,10 @@
     return "logos/" + encodeURIComponent(file).replace(/%2F/gi, "/");
   }
 
-  function isMostlyDark(img, file) {
+  function isMostlyDark(img) {
     try {
       const canvas = document.createElement("canvas");
-      const max = 72;
+      const max = 96;
       const nw = img.naturalWidth || max;
       const nh = img.naturalHeight || max;
       const scale = Math.min(1, max / Math.max(nw, nh));
@@ -139,26 +161,38 @@
       canvas.width = w;
       canvas.height = h;
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
-      if (!ctx) return /\.svg$/i.test(file);
+      if (!ctx) return false;
       ctx.clearRect(0, 0, w, h);
       ctx.drawImage(img, 0, 0, w, h);
       const data = ctx.getImageData(0, 0, w, h).data;
       let sum = 0;
       let count = 0;
       let bright = 0;
+      let dark = 0;
+      let chroma = 0;
       for (let i = 0; i < data.length; i += 4) {
         if (data[i + 3] < 40) continue;
-        const lum = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
         sum += lum;
         count += 1;
-        if (lum > 200) bright += 1;
+        if (lum > 170) bright += 1;
+        if (lum < 55) dark += 1;
+        if (Math.max(r, g, b) - Math.min(r, g, b) > 40) chroma += 1;
       }
-      if (!count) return true;
-      // White/light marks on a baked black canvas already read on a dark page.
-      if (bright / count > 0.12) return false;
-      return sum / count < 135;
+      if (!count) return false;
+      const avg = sum / count;
+      const brightRatio = bright / count;
+      const darkRatio = dark / count;
+      const chromaRatio = chroma / count;
+      // Light / white / gold marks vanish on a white plate — border only.
+      if (brightRatio > 0.08) return false;
+      if (chromaRatio > 0.18) return false;
+      // Only plate real dark ink that disappears on the dark section.
+      return darkRatio > 0.45 && avg < 90;
     } catch (err) {
-      // If we cannot sample an SVG, leave it alone instead of forcing a plate.
       return false;
     }
   }
@@ -181,15 +215,15 @@
       if (darkCache[file]) applyLightBg(item);
       return;
     }
-    const dark = isMostlyDark(img, file);
+    const dark = isMostlyDark(img);
     darkCache[file] = dark;
     if (dark) applyLightBg(item);
   }
 
-  function buildSet() {
+  function buildSet(isClone) {
     const set = document.createElement("div");
     set.className = "clients-set";
-    set.setAttribute("aria-hidden", "false");
+    set.setAttribute("aria-hidden", isClone ? "true" : "false");
 
     const frag = document.createDocumentFragment();
     FILES.forEach(function (file) {
@@ -200,17 +234,27 @@
 
       const img = document.createElement("img");
       img.src = logoSrc(file);
-      img.alt = name;
+      img.alt = isClone ? "" : name;
       img.decoding = "async";
-      img.loading = "eager";
-      img.width = 200;
-      img.height = 88;
+      // Lazy-load helps phones; the duplicate strip can stay fully lazy.
+      img.loading = "lazy";
+      img.draggable = false;
 
       const onReady = function () {
+        if (!img.naturalWidth) {
+          item.remove();
+          return;
+        }
         markIfDark(item, file, img);
       };
+      const onError = function () {
+        item.remove();
+      };
       if (img.complete && img.naturalWidth) onReady();
-      else img.addEventListener("load", onReady, { once: true });
+      else {
+        img.addEventListener("load", onReady, { once: true });
+        img.addEventListener("error", onError, { once: true });
+      }
 
       item.appendChild(img);
       frag.appendChild(item);
@@ -220,16 +264,58 @@
     return set;
   }
 
+  function bindMobileMotion(section, track) {
+    if (!section || !track) return;
+
+    // Pause the strip while it is off-screen to save battery on phones.
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            section.classList.toggle("is-offscreen", !entry.isIntersecting);
+          });
+        },
+        { rootMargin: "80px 0px", threshold: 0.01 }
+      );
+      io.observe(section);
+    }
+
+    // Touch: tap pauses / resumes so users can inspect a logo.
+    var tapStartX = 0;
+    var tapStartY = 0;
+    section.addEventListener(
+      "touchstart",
+      function (event) {
+        if (!event.touches || !event.touches[0]) return;
+        tapStartX = event.touches[0].clientX;
+        tapStartY = event.touches[0].clientY;
+      },
+      { passive: true }
+    );
+    section.addEventListener(
+      "touchend",
+      function (event) {
+        if (!event.changedTouches || !event.changedTouches[0]) return;
+        var dx = Math.abs(event.changedTouches[0].clientX - tapStartX);
+        var dy = Math.abs(event.changedTouches[0].clientY - tapStartY);
+        if (dx > 12 || dy > 12) return;
+        section.classList.toggle("is-paused");
+      },
+      { passive: true }
+    );
+  }
+
   function init() {
+    const section = document.querySelector(".clients-section");
     const track = document.querySelector(".clients-track");
     if (!track) return;
 
-    const first = buildSet();
-    const second = buildSet();
-    second.setAttribute("aria-hidden", "true");
+    const first = buildSet(false);
+    const second = buildSet(true);
 
     track.appendChild(first);
     track.appendChild(second);
+    bindMobileMotion(section, track);
   }
 
   if (document.readyState === "loading") {
