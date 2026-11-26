@@ -4,6 +4,8 @@
     "Aashrayaa Eco City.webp",
     "Abhee Developers.png",
     "Alcove Properties.svg",
+    "Ambika Developers.png",
+    "artuzu.webp",
     "Atha Constructions.png",
     "Blockone Family Office.png",
     "Broadwings.png",
@@ -33,6 +35,7 @@
     "LondonBrow Company.png",
     "MB Realty.jpg",
     "Mandate Co.svg",
+    "MW Solution.png",
     "Mathura Developers.png",
     "Meznah Ayurveda.png",
     "My Space Realty.png",
@@ -57,6 +60,7 @@
     "Stratus.png",
     "Syslatech.svg",
     "Teknix Elevators.png",
+    "Logo-TAE(Black).png",
     "The Bier Library.png",
     "The Buzz House.png",
     "The Naturalness.png",
@@ -71,6 +75,7 @@
     "VBHC.svg",
     "Vaishnodevi Group.png",
     "Venus Auto Services.png",
+    "Vibha Reality.jpeg",
     "Vrishabha Interiors.svg",
     "White Stag.svg",
     "Zed the Baker.png"
@@ -82,10 +87,13 @@
     "Blockone Family Office.png": true,
     "Clarion Hotel.png": true,
     "DAMAC.png": true,
+    "GO Digital.jpg": true,
     "Gravity Homes.webp": true,
+    "Jankal Group.png": true,
     "Mathura Developers.png": true,
     "My Space Realty.png": true,
     "Niva Earthscape.png": true,
+    "Scent Salon.jpg": true,
     "Teknix Elevators.png": true,
     "The Naturalness.png": true,
     "Venus Auto Services.png": true
@@ -99,10 +107,18 @@
 
   const darkCache = Object.create(null);
 
+  const NAME_OVERRIDES = {
+    "Logo-TAE(Black).png": "The Ahaa Edit",
+    "artuzu.webp": "Artuz",
+    "Vibha Reality.jpeg": "Vibha Reality"
+  };
+
   function brandName(file) {
+    if (NAME_OVERRIDES[file]) return NAME_OVERRIDES[file];
     return file
       .replace(/\.[^.]+$/, "")
       .replace(/\s*\(Object\s*\d+\)\s*/i, "")
+      .replace(/\s*\(\d+\)\s*/g, "")
       .replace(/\s+/g, " ")
       .trim();
   }

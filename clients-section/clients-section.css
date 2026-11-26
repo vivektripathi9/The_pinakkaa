@@ -67,14 +67,17 @@
     align-items: center;
     justify-content: center;
     height: 110px;
-    padding: 0;
+    padding: 10px 14px;
     background: none;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
 }
 
 .clients-item--on-light {
     width: 200px;
     padding: 16px 20px;
     background: #ffffff;
+    border: none;
     border-radius: 12px;
 }
 
@@ -143,12 +146,14 @@
 
     .clients-item {
         height: 84px;
-        padding: 0;
+        padding: 8px 10px;
+        border-radius: 8px;
     }
 
     .clients-item--on-light {
         width: 156px;
         padding: 12px 14px;
+        border: none;
         border-radius: 10px;
     }
 
